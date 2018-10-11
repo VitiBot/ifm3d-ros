@@ -30,12 +30,12 @@
 #include <ifm3d/camera.h>
 #include <ifm3d/fg.h>
 #include <ifm3d/image.h>
-#include <ifm3d/Config.h>
-#include <ifm3d/Dump.h>
-#include <ifm3d/Extrinsics.h>
-#include <ifm3d/SoftOff.h>
-#include <ifm3d/SoftOn.h>
-#include <ifm3d/Trigger.h>
+#include <ifm3d_ros/Config.h>
+#include <ifm3d_ros/Dump.h>
+#include <ifm3d_ros/Extrinsics.h>
+#include <ifm3d_ros/SoftOff.h>
+#include <ifm3d_ros/SoftOn.h>
+#include <ifm3d_ros/Trigger.h>
 
 namespace ifm3d_ros
 {
@@ -56,11 +56,11 @@ namespace ifm3d_ros
     //
     // ROS services
     //
-    bool Dump(ifm3d::Dump::Request& req, ifm3d::Dump::Response& res);
-    bool Config(ifm3d::Config::Request& req, ifm3d::Config::Response& res);
-    bool Trigger(ifm3d::Trigger::Request& req, ifm3d::Trigger::Response& res);
-    bool SoftOff(ifm3d::SoftOff::Request& req, ifm3d::SoftOff::Response& res);
-    bool SoftOn(ifm3d::SoftOn::Request& req, ifm3d::SoftOn::Response& res);
+    bool Dump(ifm3d_ros::Dump::Request& req, ifm3d_ros::Dump::Response& res);
+    bool Config(ifm3d_ros::Config::Request& req, ifm3d_ros::Config::Response& res);
+    bool Trigger(ifm3d_ros::Trigger::Request& req, ifm3d_ros::Trigger::Response& res);
+    bool SoftOff(ifm3d_ros::SoftOff::Request& req, ifm3d_ros::SoftOff::Response& res);
+    bool SoftOn(ifm3d_ros::SoftOn::Request& req, ifm3d_ros::SoftOn::Response& res);
 
     //
     // This is our main publishing loop and its helper functions

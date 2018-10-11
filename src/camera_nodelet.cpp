@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include <ifm3d/camera_nodelet.h>
+#include <ifm3d_ros/camera_nodelet.h>
 
 #include <cstdint>
 #include <memory>
@@ -38,12 +38,12 @@
 #include <ifm3d/camera.h>
 #include <ifm3d/fg.h>
 #include <ifm3d/image.h>
-#include <ifm3d/Config.h>
-#include <ifm3d/Dump.h>
-#include <ifm3d/Extrinsics.h>
-#include <ifm3d/SoftOff.h>
-#include <ifm3d/SoftOn.h>
-#include <ifm3d/Trigger.h>
+#include <ifm3d_ros/Config.h>
+#include <ifm3d_ros/Dump.h>
+#include <ifm3d_ros/Extrinsics.h>
+#include <ifm3d_ros/SoftOff.h>
+#include <ifm3d_ros/SoftOn.h>
+#include <ifm3d_ros/Trigger.h>
 
 namespace enc = sensor_msgs::image_encodings;
 
@@ -114,40 +114,40 @@ ifm3d_ros::CameraNodelet::onInit()
     this->np_.advertise<sensor_msgs::Image>("unit_vectors", 1, true);
 
   this->extrinsics_pub_ =
-    this->np_.advertise<ifm3d::Extrinsics>("extrinsics", 1);
+    this->np_.advertise<ifm3d_ros::Extrinsics>("extrinsics", 1);
 
   //---------------------
   // Advertised Services
   //---------------------
   this->dump_srv_ =
-    this->np_.advertiseService<ifm3d::Dump::Request, ifm3d::Dump::Response>
+    this->np_.advertiseService<ifm3d_ros::Dump::Request, ifm3d_ros::Dump::Response>
     ("Dump", std::bind(&CameraNodelet::Dump, this,
                        std::placeholders::_1,
                        std::placeholders::_2));
 
   this->config_srv_ =
-    this->np_.advertiseService<ifm3d::Config::Request, ifm3d::Config::Response>
+    this->np_.advertiseService<ifm3d_ros::Config::Request, ifm3d_ros::Config::Response>
     ("Config", std::bind(&CameraNodelet::Config, this,
                          std::placeholders::_1,
                          std::placeholders::_2));
 
   this->trigger_srv_ =
-    this->np_.advertiseService<ifm3d::Trigger::Request,
-                               ifm3d::Trigger::Response>
+    this->np_.advertiseService<ifm3d_ros::Trigger::Request,
+                               ifm3d_ros::Trigger::Response>
     ("Trigger", std::bind(&CameraNodelet::Trigger, this,
                           std::placeholders::_1,
                           std::placeholders::_2));
 
   this->soft_off_srv_ =
-    this->np_.advertiseService<ifm3d::SoftOff::Request,
-                               ifm3d::SoftOff::Response>
+    this->np_.advertiseService<ifm3d_ros::SoftOff::Request,
+                               ifm3d_ros::SoftOff::Response>
     ("SoftOff", std::bind(&CameraNodelet::SoftOff, this,
                           std::placeholders::_1,
                           std::placeholders::_2));
 
   this->soft_on_srv_ =
-    this->np_.advertiseService<ifm3d::SoftOn::Request,
-                               ifm3d::SoftOn::Response>
+    this->np_.advertiseService<ifm3d_ros::SoftOn::Request,
+                               ifm3d_ros::SoftOn::Response>
     ("SoftOn", std::bind(&CameraNodelet::SoftOn, this,
                           std::placeholders::_1,
                           std::placeholders::_2));
@@ -163,8 +163,8 @@ ifm3d_ros::CameraNodelet::onInit()
 }
 
 bool
-ifm3d_ros::CameraNodelet::Dump(ifm3d::Dump::Request& req,
-                               ifm3d::Dump::Response& res)
+ifm3d_ros::CameraNodelet::Dump(ifm3d_ros::Dump::Request& req,
+                               ifm3d_ros::Dump::Response& res)
 {
   std::lock_guard<std::mutex> lock(this->mutex_);
   res.status = 0;
@@ -197,8 +197,8 @@ ifm3d_ros::CameraNodelet::Dump(ifm3d::Dump::Request& req,
 }
 
 bool
-ifm3d_ros::CameraNodelet::Config(ifm3d::Config::Request& req,
-                                 ifm3d::Config::Response& res)
+ifm3d_ros::CameraNodelet::Config(ifm3d_ros::Config::Request& req,
+                                 ifm3d_ros::Config::Response& res)
 {
   std::lock_guard<std::mutex> lock(this->mutex_);
   res.status = 0;
@@ -233,8 +233,8 @@ ifm3d_ros::CameraNodelet::Config(ifm3d::Config::Request& req,
 }
 
 bool
-ifm3d_ros::CameraNodelet::Trigger(ifm3d::Trigger::Request& req,
-                                  ifm3d::Trigger::Response& res)
+ifm3d_ros::CameraNodelet::Trigger(ifm3d_ros::Trigger::Request& req,
+                                  ifm3d_ros::Trigger::Response& res)
 {
   std::lock_guard<std::mutex> lock(this->mutex_);
   res.status = 0;
@@ -252,8 +252,8 @@ ifm3d_ros::CameraNodelet::Trigger(ifm3d::Trigger::Request& req,
 }
 
 bool
-ifm3d_ros::CameraNodelet::SoftOff(ifm3d::SoftOff::Request& req,
-                                  ifm3d::SoftOff::Response& res)
+ifm3d_ros::CameraNodelet::SoftOff(ifm3d_ros::SoftOff::Request& req,
+                                  ifm3d_ros::SoftOff::Response& res)
 {
   std::lock_guard<std::mutex> lock(this->mutex_);
   res.status = 0;
@@ -295,8 +295,8 @@ ifm3d_ros::CameraNodelet::SoftOff(ifm3d::SoftOff::Request& req,
 }
 
 bool
-ifm3d_ros::CameraNodelet::SoftOn(ifm3d::SoftOn::Request& req,
-                                 ifm3d::SoftOn::Response& res)
+ifm3d_ros::CameraNodelet::SoftOn(ifm3d_ros::SoftOn::Request& req,
+                                 ifm3d_ros::SoftOn::Response& res)
 {
   std::lock_guard<std::mutex> lock(this->mutex_);
   res.status = 0;
@@ -597,7 +597,7 @@ ifm3d_ros::CameraNodelet::Run()
       //
       // publish extrinsics
       //
-      ifm3d::Extrinsics extrinsics_msg;
+      ifm3d_ros::Extrinsics extrinsics_msg;
       extrinsics_msg.header = optical_head;
       try
         {

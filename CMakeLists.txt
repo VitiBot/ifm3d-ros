@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(ifm3d)
+project(ifm3d_ros)
 
 find_package(ifm3d 0.9.0 CONFIG REQUIRED COMPONENTS
              camera
