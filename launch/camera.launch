@@ -12,8 +12,14 @@
   <arg name="frame_id_base" default="$(arg ns)/$(arg nn)" />
   <arg name="respawn" default="false"/>
   <arg name="assume_sw_triggered" default="false"/>
+  <arg name="filter_invalid_pixels" default="false" />
+  <arg name="filter_saturated_pixels" default="false" />
+  <arg name="filter_bad_symmetry_pixels" default="false" />
+  <arg name="filter_low_amplitude_pixels" default="false" />
+  <arg name="filter_clipped_pixels" default="false" />
+  <arg name="filter_suspect_pixels" default="false" />
 
-  <include ns="$(arg ns)" file="$(find ifm3d)/launch/nodelet.launch">
+  <include ns="$(arg ns)" file="$(find ifm3d_ros)/launch/nodelet.launch">
     <arg name="camera" value="$(arg nn)"/>
     <arg name="ip" value="$(arg ip)"/>
     <arg name="xmlrpc_port" value="$(arg xmlrpc_port)"/>
@@ -24,6 +30,12 @@
     <arg name="frame_id_base" value="$(arg ns)/$(arg nn)" />
     <arg name="respawn" value="$(arg respawn)"/>
     <arg name="assume_sw_triggered" value="$(arg assume_sw_triggered)"/>
+    <arg name="filter_invalid_pixels" value="$(arg filter_invalid_pixels)" />
+    <arg name="filter_saturated_pixels" value="$(arg filter_saturated_pixels)" />
+    <arg name="filter_bad_symmetry_pixels" value="$(arg filter_bad_symmetry_pixels)" />
+    <arg name="filter_low_amplitude_pixels" value="$(arg filter_low_amplitude_pixels)" />
+    <arg name="filter_clipped_pixels" value="$(arg filter_clipped_pixels)" />
+    <arg name="filter_suspect_pixels" value="$(arg filter_suspect_pixels)" />
   </include>
 
 </launch>

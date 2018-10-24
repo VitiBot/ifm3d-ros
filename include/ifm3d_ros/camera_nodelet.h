@@ -83,6 +83,7 @@ namespace ifm3d_ros
     double soft_on_timeout_tolerance_secs_;
     int soft_off_timeout_millis_;
     double soft_off_timeout_tolerance_secs_;
+    uint8_t filter_mask_;
 
     std::string frame_id_;
     std::string optical_frame_id_;

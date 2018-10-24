@@ -12,6 +12,12 @@
   <arg name="respawn" default="false"/>
   <arg name="assume_sw_triggered" default="false"/>
   <arg name="frame_id_base" default="ifm3d/$(arg camera)" />
+  <arg name="filter_invalid_pixels" default="false" />
+  <arg name="filter_saturated_pixels" default="false" />
+  <arg name="filter_bad_symmetry_pixels" default="false" />
+  <arg name="filter_low_amplitude_pixels" default="false" />
+  <arg name="filter_clipped_pixels" default="false" />
+  <arg name="filter_suspect_pixels" default="false" />
 
   <node pkg="nodelet"
         type="nodelet"
@@ -74,6 +80,17 @@
       soft_on_timeout_tolerance_secs: $(arg timeout_tolerance_secs)
       soft_off_timeout_millis: 500
       soft_off_timeout_tolerance_secs: 600.0
+
+      #
+      # These parameters filter the published cloud according to confidence image
+      #
+      filter_invalid_pixels: $(arg filter_invalid_pixels)
+      filter_saturated_pixels: $(arg filter_saturated_pixels)
+      filter_bad_symmetry_pixels: $(arg filter_bad_symmetry_pixels)
+      filter_low_amplitude_pixels: $(arg filter_low_amplitude_pixels)
+      filter_clipped_pixels: $(arg filter_clipped_pixels)
+      filter_suspect_pixels: $(arg filter_suspect_pixels)
+
 
       #
       # Get rid of the errors when running `rosbag -a'

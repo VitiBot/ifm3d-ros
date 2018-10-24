@@ -241,7 +241,57 @@ it is recommended for keeping the noise level of the `ifm3d` logs low.
       The TCP port the camera's xmlrpc server is listening on for requests.
     </td>
   </tr>
+  <tr>
+    <td>~filter_invalid_pixels</td>
+    <td>bool</td>
+    <td>false</td>
+    <td>
+      Remove pixels flagged as invalid by the confidence image from the pixel cloud.
+    </td>
+  </tr>
+  <tr>
+    <td>~filter_saturated_pixels</td>
+    <td>bool</td>
+    <td>false</td>
+    <td>
+      Remove pixels flagged as saturated by the confidence image from the pixel cloud.
+    </td>
+  </tr>
+  <tr>
+    <td>~filter_bad_symmetry_pixels</td>
+    <td>bool</td>
+    <td>false</td>
+    <td>
+      Remove pixels flagged as bad A-B symmetry by the confidence image from the pixel cloud.
+    </td>
+  </tr>
+  <tr>
+    <td>~filter_low_amplitude_pixels</td>
+    <td>bool</td>
+    <td>false</td>
+    <td>
+      Remove pixels flagged as below amplitude threshold by the confidence image from the pixel cloud.
+    </td>
+  </tr>
+  <tr>
+    <td>~filter_clipped_pixels</td>
+    <td>bool</td>
+    <td>false</td>
+    <td>
+      Remove pixels flagged as clipped by the confidence image from the pixel cloud.
+    </td>
+  </tr>
+  <tr>
+    <td>~filter_suspect_pixels</td>
+    <td>bool</td>
+    <td>false</td>
+    <td>
+      Remove pixels flagged as suspect/defective by the confidence image from the pixel cloud.
+    </td>
+  </tr>
 </table>
+Note: If you enable at least one of the filter, cloud will not be organized anymore.
+
 
 ### Published Topics
 

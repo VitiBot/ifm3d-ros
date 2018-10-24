@@ -34,6 +34,7 @@
 #include <ros/ros.h>
 #include <sensor_msgs/Image.h>
 #include <sensor_msgs/image_encodings.h>
+#include <pcl/filters/extract_indices.h>
 
 #include <ifm3d/camera.h>
 #include <ifm3d/fg.h>
@@ -65,6 +66,9 @@ ifm3d_ros::CameraNodelet::onInit()
   int schema_mask;
   int xmlrpc_port;
   std::string frame_id_base;
+  bool filter_invalid_pixels, filter_saturated_pixels,
+    filter_bad_symmetry_pixels, filter_low_amplitude_pixels,
+    filter_clipped_pixels, filter_suspect_pixels;
 
   if ((nn.size() > 0) && (nn.at(0) == '/'))
     {
@@ -90,6 +94,20 @@ ifm3d_ros::CameraNodelet::onInit()
   this->np_.param("soft_off_timeout_tolerance_secs",
                   this->soft_off_timeout_tolerance_secs_, 600.0);
   this->np_.param("frame_id_base", frame_id_base, frame_id_base);
+  this->np_.param("filter_invalid_pixels", filter_invalid_pixels, false);
+  this->np_.param("filter_saturated_pixels", filter_saturated_pixels, false);
+  this->np_.param("filter_bad_symmetry_pixels", filter_bad_symmetry_pixels, false);
+  this->np_.param("filter_low_amplitude_pixels", filter_low_amplitude_pixels, false);
+  this->np_.param("filter_clipped_pixels", filter_clipped_pixels, false);
+  this->np_.param("filter_suspect_pixels", filter_suspect_pixels, false);
+
+  this->filter_mask_ =
+    (filter_invalid_pixels ? 0x01 : 0) |
+    (filter_saturated_pixels ? 0x02 : 0) |
+    (filter_bad_symmetry_pixels ? 0x04 : 0) |
+    (filter_low_amplitude_pixels ? 0x08 : 0) |
+    (filter_clipped_pixels ? 0x40 : 0) |
+    (filter_suspect_pixels ? 0x80 : 0);
 
   this->xmlrpc_port_ = static_cast<std::uint16_t>(xmlrpc_port);
   this->schema_mask_ = static_cast<std::uint16_t>(schema_mask);
@@ -412,7 +430,6 @@ ifm3d_ros::CameraNodelet::Run()
 
   pcl::PointCloud<ifm3d::PointT>::Ptr
     cloud(new pcl::PointCloud<ifm3d::PointT>());
-
   cv::Mat confidence_img;
   cv::Mat distance_img;
   cv::Mat amplitude_img;
@@ -520,6 +537,31 @@ ifm3d_ros::CameraNodelet::Run()
       extrinsics = this->im_->Extrinsics();
 
       lock.unlock();
+
+      //
+      // Filter the point cloud
+      //
+      if (filter_mask_)
+        {
+            cv::Mat filterMatrix;
+            std::vector<cv::Point> filteredPoints;
+            cv::bitwise_and(confidence_img, filter_mask_, filterMatrix);
+            cv::findNonZero(filterMatrix, filteredPoints);
+
+            pcl::IndicesPtr filteredIndices(new std::vector<int>);
+            filteredIndices->resize(filteredPoints.size());
+            for (size_t i = 0; i < filteredPoints.size(); i++)
+              {
+                filteredIndices->at(i) = filteredPoints[i].x + filteredPoints[i].y * filterMatrix.cols;
+              }
+
+            ROS_INFO_STREAM("Final cloud size: " << (cloud->size() - filteredIndices->size()) << " / " << cloud->size());
+            pcl::ExtractIndices<ifm3d::PointT> filter;
+            filter.setInputCloud(cloud);
+            filter.setNegative(true);
+            filter.setIndices(filteredIndices);
+            filter.filter(*cloud);
+        }
 
       //
       // Now, do the publishing
