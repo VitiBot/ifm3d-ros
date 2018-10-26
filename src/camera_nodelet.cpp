@@ -363,21 +363,21 @@ ifm3d_ros::CameraNodelet::InitStructures(std::uint16_t mask)
 
   try
     {
-      NODELET_INFO_STREAM("Running dtors...");
+      NODELET_DEBUG_STREAM("Running dtors...");
       this->im_.reset();
       this->fg_.reset();
       this->cam_.reset();
 
-      NODELET_INFO_STREAM("Initializing camera...");
+      NODELET_DEBUG_STREAM("Initializing camera...");
       this->cam_ = ifm3d::Camera::MakeShared(this->camera_ip_,
                                              this->xmlrpc_port_,
                                              this->password_);
       ros::Duration(1.0).sleep();
 
-      NODELET_INFO_STREAM("Initializing framegrabber...");
+      NODELET_DEBUG_STREAM("Initializing framegrabber...");
       this->fg_ = std::make_shared<ifm3d::FrameGrabber>(this->cam_, mask);
 
-      NODELET_INFO_STREAM("Initializing image buffer...");
+      NODELET_DEBUG_STREAM("Initializing image buffer...");
       this->im_ = std::make_shared<ifm3d::ImageBuffer>();
 
       retval = true;
@@ -461,7 +461,7 @@ ifm3d_ros::CameraNodelet::Run()
           if ((ros::Time::now() - last_frame).toSec() >
               this->timeout_tolerance_secs_)
             {
-              NODELET_WARN_STREAM("Attempting to restart framegrabber...");
+              NODELET_DEBUG_STREAM("Attempting to restart framegrabber...");
               while (! this->InitStructures(got_uvec
                                             ? this->schema_mask_
                                             : ifm3d::IMG_UVEC))
